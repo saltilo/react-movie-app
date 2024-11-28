@@ -3,7 +3,7 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 export const fetchMovies = async (query) => {
   const response = await fetch(
-    `${API_URL}/search/movie?query=${query}&api_key=${API_KEY}`,
+    `${API_URL}/search/movie?query=${query}&api_key=${API_KEY}`
   );
 
   if (!response.ok) {
