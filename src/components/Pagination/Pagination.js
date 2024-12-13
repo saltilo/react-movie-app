@@ -1,8 +1,14 @@
-import React from "react";
-import "./Pagination.css";
+import { Pagination as PaginationUI } from "antd";
 
-const Pagination = () => {
-  return <div className="Pagination">{}</div>;
-};
-
-export default Pagination;
+export default function Pagination({ page, totalResults, onPageChange }) {
+  return (
+    <PaginationUI
+      current={page}
+      total={totalResults}
+      pageSize={20}
+      hideOnSinglePage
+      showSizeChanger={false}
+      onChange={onPageChange}
+    />
+  );
+}

@@ -6,11 +6,9 @@ const MovieCard = ({ title, date, description, posterPath }) => {
   const formattedDate = date
     ? format(new Date(date), "MMMM d, yyyy")
     : "Unknown";
-
   const posterUrl = posterPath
     ? `https://image.tmdb.org/t/p/original${posterPath}`
     : "https://via.placeholder.com/300x450?text=No+Image";
-
   const shortDescription = sliceText(description, 200);
 
   return (

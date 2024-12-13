@@ -8,11 +8,14 @@ body {
   font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f7f7f7;
+  background-color: #ffffff;
 }
 
 .container {
   max-width: 1010px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0 auto;
   background-color: #ffffff;
 }
@@ -22,5 +25,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+}
+
+.ant-alert {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.pagination {
+  padding: 20px;
 }

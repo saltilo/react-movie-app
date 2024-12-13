@@ -12,13 +12,13 @@ const MovieList = ({ movies, error }) => {
     );
   }
 
-  if (!movies || movies.length === 0) {
+  if (!movies?.length) {
     return (
       <div className="container">
         <Alert
           message="No movies found"
-          type="info"
           description="Try adjusting your search query."
+          type="info"
           showIcon
         />
       </div>
