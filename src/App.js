@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import MovieList from "./components/MovieList/MovieList";
-import SearchBar from "./components/SearchBar/SearchBar";
-import { Spin, Alert, Pagination } from "antd";
+
+import SearchTab from "./components/SearchTab/SearchTab";
+import RatedTab from "./components/RatedTab/RatedTab";
+import { Alert, Tabs } from "antd";
 import { fetchMovies } from "./api";
+import { GenresProvider } from "./components/context/GenresContext";
 import "./App.css";
 
 const App = () => {
@@ -78,36 +80,39 @@ const App = () => {
     );
   }
 
+  const tabsItems = [
+    {
+      key: "1",
+      label: "Search",
+      children: (
+        <SearchTab
+          movies={movies}
+          loading={loading}
+          hasSearched={hasSearched}
+          error={error}
+          query={query}
+          totalResults={totalResults}
+          currentPage={currentPage}
+          onSearch={handleSearch}
+          onPageChange={handlePageChange}
+        />
+      ),
+    },
+    {
+      key: "2",
+      label: "Rated",
+      children: <RatedTab />,
+    },
+  ];
+
   return (
-    <div className="container">
-      <SearchBar onSearch={handleSearch} />
-      {loading && (
-        <div className="spinner-container">
-          <Spin size="large" tip="Loading movies..." />
+    <GenresProvider>
+      <div className="container">
+        <div className="tabs-wrapper">
+          <Tabs defaultActiveKey="1" items={tabsItems} />
         </div>
-      )}
-      {!loading && !hasSearched && (
-        <Alert message="Type to search..." type="info" showIcon />
-      )}
-      {!loading && error && (
-        <Alert message="Error" description={error} type="error" showIcon />
-      )}
-      {!loading && hasSearched && movies.length === 0 && (
-        <Alert message="No movies found" type="info" showIcon />
-      )}
-      {!loading && hasSearched && movies.length > 0 && (
-        <>
-          <MovieList movies={movies} />
-          <Pagination
-            current={currentPage}
-            total={totalResults}
-            pageSize={20}
-            onChange={handlePageChange}
-            className="pagination"
-          />
-        </>
-      )}
-    </div>
+      </div>
+    </GenresProvider>
   );
 };
 
