@@ -12,9 +12,10 @@ body {
 }
 
 .container {
-  max-width: 1010px;
-  margin: 0 auto;
-  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  max-width: 1300px;
+  margin-inline: auto;
 }
 
 .tabs-wrapper {
@@ -26,13 +27,31 @@ body {
 }
 
 .ant-tabs {
-  width: 1010px;
+  width: 1200px;
   justify-content: center;
+  margin: 2em;
 }
 
 .ant-tabs-nav-wrap {
   margin-top: 1.5em;
   justify-content: space-around;
+}
+
+.ant-tabs-nav::before {
+  border-bottom: none !important;
+}
+
+.ant-tabs-nav {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.ant-tabs-nav-list {
+  position: relative;
+  border-bottom: 1px solid #d9d9d9;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 .spinner-container {

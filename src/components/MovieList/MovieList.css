@@ -1,6 +1,13 @@
 .movie-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 20px;
   justify-content: center;
+  padding: 0.5em;
+}
+
+@media (max-width: 550px) {
+  .movie-list {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
 }
