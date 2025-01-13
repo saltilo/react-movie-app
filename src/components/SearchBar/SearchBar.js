@@ -5,14 +5,17 @@ import "./SearchBar.css";
 
 const SearchBar = ({ onSearch }) => {
   const handleInput = debounce((e) => {
-    onSearch(e.target.value);
+    const trimmedValue = e.target.value.trim();
+    if (trimmedValue) {
+      onSearch(trimmedValue);
+    }
   }, 500);
 
   return (
     <div className="search-bar">
       <Input
         placeholder="Type to search..."
-        onChange={(e) => handleInput(e)}
+        onChange={handleInput}
         allowClear
       />
     </div>

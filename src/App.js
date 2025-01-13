@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-
 import SearchTab from "./components/SearchTab/SearchTab";
 import RatedTab from "./components/RatedTab/RatedTab";
-import { Alert, Tabs } from "antd";
+import { Tabs } from "antd";
 import { fetchMovies } from "./api";
 import { GenresProvider } from "./components/context/GenresContext";
 import "./App.css";
@@ -11,74 +10,43 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [query, setQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState("1");
 
-  const loadMovies = async (searchQuery, page = 1) => {
-    if (!isOnline) {
-      setError("You are offline. Please check your internet connection.");
-      return;
-    }
-
+  const handleSearch = async (value) => {
+    setQuery(value);
+    setCurrentPage(1);
     setLoading(true);
-    setError(null);
-
     try {
-      const { results, total_results } = await fetchMovies(searchQuery, page);
+      const { results, total_results } = await fetchMovies(value);
       setMovies(results);
       setTotalResults(total_results);
     } catch (err) {
-      setError(err.message || "Failed to fetch movies.");
+      setError("Failed to fetch movies.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSearch = (value) => {
-    setQuery(value);
-    setCurrentPage(1);
-    setHasSearched(true);
-    loadMovies(value, 1);
-  };
-
-  const handlePageChange = (page) => {
+  const handlePageChange = async (page) => {
     setCurrentPage(page);
-    loadMovies(query, page);
+    setLoading(true);
+    try {
+      const { results, total_results } = await fetchMovies(query, page);
+      setMovies(results);
+      setTotalResults(total_results);
+    } catch (err) {
+      setError("Failed to fetch movies.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const setupNetworkListeners = () => {
-    const checkNetworkStatus = () => {
-      setIsOnline(navigator.onLine);
-    };
-
-    window.addEventListener("online", checkNetworkStatus);
-    window.addEventListener("offline", checkNetworkStatus);
-
-    return () => {
-      window.removeEventListener("online", checkNetworkStatus);
-      window.removeEventListener("offline", checkNetworkStatus);
-    };
+  const handleTabChange = (key) => {
+    setActiveTab(key);
   };
-
-  if (!movies.length && !error && !loading && !hasSearched) {
-    setupNetworkListeners();
-  }
-
-  if (!isOnline) {
-    return (
-      <div className="container">
-        <Alert
-          message="No network connection"
-          type="error"
-          description="Please check your internet connection."
-          showIcon
-        />
-      </div>
-    );
-  }
 
   const tabsItems = [
     {
@@ -88,7 +56,6 @@ const App = () => {
         <SearchTab
           movies={movies}
           loading={loading}
-          hasSearched={hasSearched}
           error={error}
           query={query}
           totalResults={totalResults}
@@ -101,16 +68,19 @@ const App = () => {
     {
       key: "2",
       label: "Rated",
-      children: <RatedTab />,
+      children: <RatedTab key={activeTab} />,
     },
   ];
 
   return (
     <GenresProvider>
       <div className="container">
-        <div className="tabs-wrapper">
-          <Tabs defaultActiveKey="1" items={tabsItems} />
-        </div>
+        <Tabs
+          defaultActiveKey="1"
+          activeKey={activeTab}
+          onChange={handleTabChange}
+          items={tabsItems}
+        />
       </div>
     </GenresProvider>
   );

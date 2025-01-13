@@ -4,32 +4,19 @@ import MovieList from "../MovieList/MovieList";
 import { RatingService } from "../../services/RatingService";
 
 const RatedTab = () => {
-  const [ratedMovies, setRatedMovies] = useState([]);
+  const [ratedMovies, setRatedMovies] = useState(
+    RatingService.getRatedMovies()
+  );
   const [error, setError] = useState(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  const loadRatedMovies = () => {
-    try {
-      setError(null);
-      const movies = RatingService.getRatedMovies();
-
-      setRatedMovies(movies);
-    } catch (err) {
-      console.error("Failed to fetch rated movies:", err.message);
-      setError(err.message || "Failed to fetch rated movies.");
-    } finally {
-      setIsInitialized(true);
-    }
-  };
 
   const handleUpdateRatedMovies = (movieId, rating) => {
-    console.log(`Updating rating for Movie ID: ${movieId}, Rating: ${rating}`);
-    loadRatedMovies();
+    try {
+      RatingService.rateMovie(movieId, rating);
+      setRatedMovies(RatingService.getRatedMovies());
+    } catch (err) {
+      setError("Failed to update movie rating.");
+    }
   };
-
-  if (!isInitialized) {
-    loadRatedMovies();
-  }
 
   return (
     <div className="rated-tab">

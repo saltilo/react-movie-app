@@ -6,7 +6,6 @@ import { Alert, Spin, Pagination } from "antd";
 const SearchTab = ({
   movies,
   loading,
-  hasSearched,
   error,
   query,
   totalResults,
@@ -22,16 +21,10 @@ const SearchTab = ({
           <Spin size="large" />
         </div>
       )}
-      {!loading && !hasSearched && (
-        <Alert message="Type to search..." type="info" showIcon />
-      )}
       {!loading && error && (
         <Alert message="Error" description={error} type="error" showIcon />
       )}
-      {!loading && hasSearched && movies.length === 0 && (
-        <Alert message="No movies found" type="info" showIcon />
-      )}
-      {!loading && hasSearched && movies.length > 0 && (
+      {!loading && !error && movies.length > 0 && (
         <>
           <MovieList movies={movies} />
           <Pagination
@@ -42,6 +35,9 @@ const SearchTab = ({
             className="pagination"
           />
         </>
+      )}
+      {!loading && !error && movies.length === 0 && (
+        <Alert message="No movies found" type="info" showIcon />
       )}
     </div>
   );

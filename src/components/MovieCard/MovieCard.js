@@ -28,14 +28,11 @@ const MovieCard = ({
 
   const posterUrl = posterPath
     ? `https://image.tmdb.org/t/p/original${posterPath}`
-    : "https://via.placeholder.com/300x450?text=No+Image";
+    : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
   const shortDescription = sliceText(description, 200);
 
   const handleRateChange = async (value) => {
-    console.log("Movie ID:", movieId);
-    console.log("Rating:", value);
-
     const movieData = {
       id: movieId,
       title,
@@ -58,7 +55,17 @@ const MovieCard = ({
 
   return (
     <div className="movie-card">
-      <img src={posterUrl} alt={title} className="movie-card__image" />
+      <img
+        key={posterUrl}
+        src={posterUrl}
+        alt={title}
+        className="movie-card__image"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src =
+            "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+        }}
+      />
       <div className="movie-card__content">
         <div className="movie-card__header">
           <h3 className="movie-card__title">{title}</h3>
